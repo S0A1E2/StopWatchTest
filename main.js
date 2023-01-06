@@ -1,9 +1,3 @@
-(function () {
-    var btns = document.getElementsByClassName('add-btn');
-    btns[0].addEventListener('click', function () {
-        new StopWatch(btns[0].getAttribute('data-idw'));
-    });
-});
 var StopWatch = /** @class */ (function () {
     function StopWatch(wrapper) {
         this.domRef = document.getElementById(wrapper);
@@ -26,7 +20,7 @@ var StopWatch = /** @class */ (function () {
     StopWatch.prototype.stop = function () {
         if (this.status === 'stopped')
             throw new Error('already stopped');
-        this.duration = this.currentTime - this.duration;
+        this.duration = Date.now() - this.currentTime + this.duration;
         console.log(this.duration);
         this.status = 'stopped';
         return this.duration;
@@ -44,3 +38,9 @@ function createBtn(name, listener) {
     startBtn.addEventListener('click', listener);
     return startBtn;
 }
+(function () {
+    var btns = document.getElementsByClassName('add-btn');
+    btns[0].addEventListener('click', function () {
+        new StopWatch(btns[0].getAttribute('data-idw'));
+    });
+})();

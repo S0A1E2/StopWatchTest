@@ -1,9 +1,3 @@
-(function() {
-   const btns = document.getElementsByClassName('add-btn');
-   btns[0].addEventListener('click', () => {
-      new StopWatch(btns[0].getAttribute('data-idw') as string);
-   });
-})
 class StopWatch {
    private duration: number;
    private status: string;
@@ -16,7 +10,7 @@ class StopWatch {
       if (!this.domRef) throw new Error('Does not exstis');
       this.render();
    }
-   render() {
+   private render() {
          this.domRef!.append(
             createBtn('start', () => this.start()),
             createBtn('stop', () => this.stop()),
@@ -30,7 +24,7 @@ class StopWatch {
    }
    stop() {
       if(this.status === 'stopped') throw new Error('already stopped');
-      this.duration = this.currentTime - this.duration;
+      this.duration = Date.now() - this.currentTime + this.duration;
       console.log(this.duration);
       this.status = 'stopped';
       return this.duration;
@@ -46,3 +40,9 @@ function createBtn(name: string, listener: () => void) {
    startBtn.addEventListener('click', listener);
    return startBtn;
 }
+(function() {
+   const btns = document.getElementsByClassName('add-btn');
+   btns[0].addEventListener('click', () => {
+      new StopWatch(btns[0].getAttribute('data-idw') as string);
+   });
+})();
