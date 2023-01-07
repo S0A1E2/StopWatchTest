@@ -1,5 +1,5 @@
 class StopWatch {
-   private duration: number;
+   private duration: any;
    private status: string;
    private currentTime: any;
    private domRef: HTMLElement | null; 
@@ -7,8 +7,9 @@ class StopWatch {
       this.domRef = document.getElementById(wrapper);
       this.duration = 0;
       this.status = 'stopped';
-      if (!this.domRef) throw new Error('Does not exstis');
+      if (!this.domRef) throw new Error('Does not exist');
       this.render();
+      this.watch();
    }
    private render() {
          this.domRef!.append(
@@ -17,9 +18,18 @@ class StopWatch {
             createBtn('reset', () => this.reset()),
          )
    }
+   watch() {
+      const article = document.createElement("article");
+      article.id = "article";
+      document.body.appendChild(article);
+      setInterval(() => {
+         document.getElementById("article")!.innerHTML = this.stop();
+      }, 100);
+   }
    start() {
       if(this.status === 'started') throw new Error('already started');
       this.currentTime = Date.now();
+      this.watch();
       this.status = 'started';
    }
    stop() {

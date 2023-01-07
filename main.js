@@ -4,17 +4,28 @@ var StopWatch = /** @class */ (function () {
         this.duration = 0;
         this.status = 'stopped';
         if (!this.domRef)
-            throw new Error('Does not exstis');
+            throw new Error('Does not exist');
         this.render();
+        this.watch();
     }
     StopWatch.prototype.render = function () {
         var _this = this;
         this.domRef.append(createBtn('start', function () { return _this.start(); }), createBtn('stop', function () { return _this.stop(); }), createBtn('reset', function () { return _this.reset(); }));
     };
+    StopWatch.prototype.watch = function () {
+        var _this = this;
+        var article = document.createElement("article");
+        article.id = "article";
+        document.body.appendChild(article);
+        setInterval(function () {
+            document.getElementById("article").innerHTML = _this.stop();
+        }, 100);
+    };
     StopWatch.prototype.start = function () {
         if (this.status === 'started')
             throw new Error('already started');
         this.currentTime = Date.now();
+        this.watch();
         this.status = 'started';
     };
     StopWatch.prototype.stop = function () {
