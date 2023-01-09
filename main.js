@@ -6,33 +6,36 @@ var StopWatch = /** @class */ (function () {
         if (!this.domRef)
             throw new Error('Does not exist');
         this.render();
-        this.watch();
     }
     StopWatch.prototype.render = function () {
         var _this = this;
         this.domRef.append(createBtn('start', function () { return _this.start(); }), createBtn('stop', function () { return _this.stop(); }), createBtn('reset', function () { return _this.reset(); }));
     };
     StopWatch.prototype.watch = function () {
-        var _this = this;
-        var article = document.createElement("article");
-        article.id = "article";
-        document.body.appendChild(article);
-        setInterval(function () {
-            document.getElementById("article").innerHTML = _this.stop();
-        }, 100);
+        var p = document.createElement("p");
+        p.id = "p";
+        document.body.appendChild(p);
+        document.getElementById("p").innerHTML = this.currentWatch();
     };
     StopWatch.prototype.start = function () {
+        var _this = this;
         if (this.status === 'started')
             throw new Error('already started');
         this.currentTime = Date.now();
-        this.watch();
         this.status = 'started';
+        this.interval = setInterval(function () { return _this.watch(); }, 100);
+    };
+    StopWatch.prototype.currentWatch = function () {
+        this.duration = Date.now() - this.currentTime + this.duration;
+        if (this.status === 'stopped')
+            this.stop();
+        return this.duration;
     };
     StopWatch.prototype.stop = function () {
+        clearInterval(this.interval);
         if (this.status === 'stopped')
             throw new Error('already stopped');
         this.duration = Date.now() - this.currentTime + this.duration;
-        console.log(this.duration);
         this.status = 'stopped';
         return this.duration;
     };
@@ -40,6 +43,7 @@ var StopWatch = /** @class */ (function () {
         if (this.status === 'started')
             this.stop();
         this.duration = 0;
+        document.getElementById("p").innerHTML = this.duration;
     };
     return StopWatch;
 }());
